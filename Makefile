@@ -6,7 +6,7 @@
 #    By: rpliego <rpliego@student.42barcelo>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/02 15:10:07 by rpliego           #+#    #+#              #
-#    Updated: 2023/12/07 21:11:29 by rpliego          ###   ########.fr        #
+#    Updated: 2023/12/17 19:50:25 by rpliego          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,8 +17,7 @@ RM = rm -rf
 
 SRC =	main.c \
 		init.c \
-		utils.c \
-		threads.c
+		utils.c
 
 OBJ = $(SRC:.c=.o)
 INCLUDE = philo.h
@@ -26,7 +25,7 @@ INCLUDE = philo.h
 all: $(NAME)
 
 $(NAME): $(OBJ) $(INCLUDE) Makefile
-	$(CC) $(CFLAGS) -fsanitize=thread -g -o $(NAME) $(OBJ)
+	$(CC) $(CFLAGS) -fsanitize=address -g -o $(NAME) $(OBJ)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $<

@@ -6,7 +6,7 @@
 /*   By: rpliego <rpliego@student.42barcelo>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 15:27:32 by rpliego           #+#    #+#             */
-/*   Updated: 2023/12/07 21:57:50 by rpliego          ###   ########.fr       */
+/*   Updated: 2023/12/17 22:35:43 by rpliego          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,51 @@ void	init_data(t_data *data, char **av, int ac)
 		data->meals_nb = ft_atoi(av[5]);
 	else
 		data->meals_nb = -1;
+	data->dead = 0;
+	data->finished = 0;
+	pthread_mutex_init(&data->lock, NULL);
+}
+
+void	init_malloc(t_data *data)
+{
+	data->tid = malloc(data->philo_nb * sizeof(pthread_t));
+	if (!data->tid)
+		ft_exit(data);
+	data->philos = malloc(data->philo_nb * sizeof(t_philo));
+	if (!data->philos)
+		ft_exit(data);
+	data->forks = malloc(data->philo_nb * sizeof(pthread_mutex_t));
+	if (!data->forks)
+		ft_exit(data);
+}
+
+void	init_mutex(t_data *data)
+{
+	int	i;
+
+	i = -1;
+	while (++i < data->philo_nb)
+		pthread_mutex_init(&data->forks[i], NULL);
+	data->philos[0].r_fork = data->forks[0];
+	data->philos[0].l_fork = data->forks[data->philo_nb - 1];
+	i = 1;
+	while (i < data->philo_nb)
+	{
+		data->philos[i].r_fork = data->forks[i];
+		data->philos[i].l_fork = data->forks[i - 1];
+		i++;
+	}
+}
+
+void	init_philo(t_data *data)
+{
+	
 }
 
 void	init(t_data *data, char **av, int ac)
 {
 	init_data(data, av, ac);
+	init_malloc(data);
+	init_mutex(data);
+	init_philo(data);
 }

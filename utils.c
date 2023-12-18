@@ -6,7 +6,7 @@
 /*   By: rpliego <rpliego@student.42barcelo>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 15:27:47 by rpliego           #+#    #+#             */
-/*   Updated: 2023/12/02 17:38:43 by rpliego          ###   ########.fr       */
+/*   Updated: 2023/12/17 19:16:12 by rpliego          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_atoi(char *str)
 {
-	int	out;
+	long	out;
 
 	out = 0;
 	while (*str != '\0')
