@@ -1,31 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   actions.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rpliego <rpliego@student.42barcelo>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/18 21:42:12 by rpliego           #+#    #+#             */
-/*   Updated: 2023/12/18 21:49:25 by rpliego          ###   ########.fr       */
+/*   Created: 2023/12/18 21:54:19 by rpliego           #+#    #+#             */
+/*   Updated: 2023/12/20 14:37:33 by rpliego          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-long	get_time(void)
+void	eat(t_philo *philo)
 {
-	struct timeval	tv;
+	pthread_mutex_lock(&philo->l_fork);
+	pthread_mutex_lock(&philo->r_fork);
+	while (philo->data->eat_time > )
+	{
+		/* code */
+	}
 	
-	if (gettimeofday(&tv, NULL))
-		return (printf("gettimeofday() FAILURE\n"));
-	return ((tv.tv_sec * (u_int64_t)1000) + (tv.tv_usec / 1000));
-}
-
-int	ft_usleep(useconds_t time)
-{
-	u_int64_t	start;
-	start = get_time();
-	while ((get_time() - start) < time)
-		usleep(time / 10);
-	return(0);
 }

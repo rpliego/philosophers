@@ -6,7 +6,7 @@
 /*   By: rpliego <rpliego@student.42barcelo>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 11:48:43 by rpliego           #+#    #+#             */
-/*   Updated: 2023/12/17 18:04:22 by rpliego          ###   ########.fr       */
+/*   Updated: 2023/12/20 14:35:28 by rpliego          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <sys/time.h>
 
 typedef struct s_philo
 {
@@ -25,7 +26,8 @@ typedef struct s_philo
 	int				id;
 	int				eat_count;
 	int				status;
-	int				time_to_die;
+	int				dead;
+	long			time_to_die;
 	pthread_mutex_t	lock;
 	pthread_mutex_t	r_fork;
 	pthread_mutex_t	l_fork;
@@ -37,19 +39,27 @@ typedef struct s_data
 	int				philo_nb;
 	int				meals_nb;
 	int				finished;
-	int				dead;
 	long			death_time;
 	long			eat_time;
 	long			sleep_time;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	lock;
+	pthread_mutex_t	write;
 	t_philo			*philos;
 }				t_data;
 
+/*--------args------*/
 int		check_args(int ac, char **av);
-int		ft_atoi(char *str);
+long	ft_atoi(char *str);
+
+/*--------init------*/
 void	init(t_data *data, char **av, int ac);
-void	ft_exit(t_data *data);
 void	init_threads(t_data *data);
+
+/*--------time------*/
+long	get_time(void);
+int	ft_usleep(useconds_t time);
+
+void	ft_exit(t_data *data);
 
 #endif
