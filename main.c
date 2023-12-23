@@ -6,7 +6,7 @@
 /*   By: rpliego <rpliego@student.42barcelo>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 11:48:05 by rpliego           #+#    #+#             */
-/*   Updated: 2023/12/20 14:01:56 by rpliego          ###   ########.fr       */
+/*   Updated: 2023/12/20 17:39:32 by rpliego          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	main(int ac, char **av)
 	t_data	data;
 
 	if (check_args(ac, av) != 0)
-		return(1);
+		return (1);
 	init(&data, av, ac);
 	init_threads(&data);
 	ft_exit(&data);

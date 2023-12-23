@@ -6,12 +6,12 @@
 #    By: rpliego <rpliego@student.42barcelo>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/02 15:10:07 by rpliego           #+#    #+#              #
-#    Updated: 2023/12/20 13:48:54 by rpliego          ###   ########.fr        #
+#    Updated: 2023/12/22 19:39:26 by rpliego          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
-CC = cc -pthread
+CC = cc
 CFLAGS = -Wall -Werror -Wextra -fsanitize=address -g
 RM = rm -rf
 
@@ -19,7 +19,8 @@ SRC =	main.c \
 		init.c \
 		check_args.c \
 		threads.c \
-		utils.c
+		utils.c \
+		actions.c
 
 OBJ = $(SRC:.c=.o)
 INCLUDE = philo.h
@@ -27,7 +28,7 @@ INCLUDE = philo.h
 all: $(NAME)
 
 $(NAME): $(OBJ) $(INCLUDE) Makefile
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJ)
+	$(CC) -pthread $(CFLAGS) -o $(NAME) $(OBJ)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $<
