@@ -6,7 +6,7 @@
 /*   By: rpliego <rpliego@student.42barcelo>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 15:27:32 by rpliego           #+#    #+#             */
-/*   Updated: 2023/12/23 20:16:20 by rpliego          ###   ########.fr       */
+/*   Updated: 2023/12/28 18:26:40 by rpliego          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,13 @@ void	init_mutex(t_data *data)
 	i = -1;
 	while (++i < data->philo_nb)
 		pthread_mutex_init(&data->forks[i], NULL);
-	data->philos[0].l_fork = data->forks[0];
-	data->philos[0].r_fork = data->forks[data->philo_nb - 1];
+	data->philos[0].l_fork = &data->forks[0];
+	data->philos[0].r_fork = &data->forks[data->philo_nb - 1];
 	i = 1;
 	while (i < data->philo_nb)
 	{
-		data->philos[i].l_fork = data->forks[i];
-		data->philos[i].r_fork = data->forks[i - 1];
+		data->philos[i].l_fork = &data->forks[i];
+		data->philos[i].r_fork = &data->forks[i - 1];
 		i++;
 	}
 }
@@ -52,13 +52,13 @@ void	init_malloc(t_data *data)
 {
 	data->tid = malloc(data->philo_nb * sizeof(pthread_t));
 	if (!data->tid)
-		ft_exit(data);
+		ft_clear_data(data);
 	data->forks = malloc(data->philo_nb * sizeof(pthread_mutex_t));
 	if (!data->forks)
-		ft_exit(data);
+		ft_clear_data(data);
 	data->philos = malloc(data->philo_nb * sizeof(t_philo));
 	if (!data->philos)
-		ft_exit(data);
+		ft_clear_data(data);
 }
 
 void	init_data(t_data *data, char **av, int ac)
