@@ -6,13 +6,13 @@
 #    By: rpliego <rpliego@student.42barcelo>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/02 15:10:07 by rpliego           #+#    #+#              #
-#    Updated: 2023/12/28 19:44:07 by rpliego          ###   ########.fr        #
+#    Updated: 2023/12/29 21:04:29 by rpliego          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 CC = cc
-CFLAGS = -Wall -Werror -Wextra #-fsanitize=thread -g
+CFLAGS = -Wall -Werror -Wextra #-fsanitize=address -g
 RM = rm -rf
 
 SRC =	main.c \
