@@ -6,7 +6,7 @@
 /*   By: rpliego <rpliego@student.42barcelo>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/18 21:54:19 by rpliego           #+#    #+#             */
-/*   Updated: 2023/12/29 21:09:23 by rpliego          ###   ########.fr       */
+/*   Updated: 2023/12/29 21:10:25 by rpliego          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@ void	print_status(int status, t_philo *philo)
 {
 	long	i;
 	
-	// if (philo->data->dead == 1 && status != DIED)
-	// 	return ;
 	pthread_mutex_lock(&philo->data->write);
 	pthread_mutex_lock(&philo->data->lock);
 	i = get_time() - philo->data->start_time;
@@ -41,12 +39,9 @@ void	take_fork(t_philo *philo)
 	print_status(FORK, philo);
 	pthread_mutex_lock(philo->l_fork);
 	print_status(FORK, philo);
-	// pthread_mutex_lock(&philo->lock);
-	//philo->data->etin[philo->id -1] = 1;
 	pthread_mutex_lock(&philo->lock);
 	philo->eating = 1;
 	pthread_mutex_unlock(&philo->lock);
-	//pthread_mutex_unlock(&philo->data->lock);
 }
 
 void	drop_fork(t_philo *philo)
