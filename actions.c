@@ -6,7 +6,7 @@
 /*   By: rpliego <rpliego@student.42barcelo>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/18 21:54:19 by rpliego           #+#    #+#             */
-/*   Updated: 2023/12/29 21:10:25 by rpliego          ###   ########.fr       */
+/*   Updated: 2023/12/30 18:37:54 by rpliego          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,12 @@
 void	print_status(int status, t_philo *philo)
 {
 	long	i;
-	
+
 	pthread_mutex_lock(&philo->data->write);
 	pthread_mutex_lock(&philo->data->lock);
+	pthread_mutex_lock(&philo->lock);
 	i = get_time() - philo->data->start_time;
-	if (status == FORK && philo->data->dead != 1)	
+	if (status == FORK && philo->data->dead != 1)
 		printf("%s%ld Philo %i has taken a fork\n%s", G, i, philo->id, E);
 	if (status == EATING && philo->data->dead != 1)
 		printf("%s%ld Philo %i is eating\n%s", Y, i, philo->id, E);
@@ -29,6 +30,7 @@ void	print_status(int status, t_philo *philo)
 		printf("%s%ld Philo %i is thinking\n%s", O, i, philo->id, E);
 	if (status == DIED)
 		printf("%s%ld Philo %i has died\n%s", R, i, philo->id, E);
+	pthread_mutex_unlock(&philo->lock);
 	pthread_mutex_unlock(&philo->data->lock);
 	pthread_mutex_unlock(&philo->data->write);
 }
@@ -69,8 +71,10 @@ void	eat(t_philo *philo)
 	philo->eating = 1;
 	pthread_mutex_unlock(&philo->lock);
 	philo->eat_count++;
+	pthread_mutex_lock(&philo->data->lock);
 	if (philo->eat_count == philo->data->meals_nb)
 		philo->finished = 1;
+	pthread_mutex_unlock(&philo->data->lock);
 	ft_usleep(philo->data->eat_time);
 	drop_fork(philo);
 }

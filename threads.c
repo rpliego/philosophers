@@ -6,7 +6,7 @@
 /*   By: rpliego <rpliego@student.42barcelo>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 21:36:48 by rpliego           #+#    #+#             */
-/*   Updated: 2023/12/29 21:28:18 by rpliego          ###   ########.fr       */
+/*   Updated: 2023/12/30 18:41:12 by rpliego          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,27 +15,28 @@
 long	*ft_aux(t_data *data, int i)
 {
 	long	*out;
-	
+
+	out = malloc(3 * sizeof(long));
 	pthread_mutex_lock(&data->philos[i].lock);
 	out[0] = data->philos[i].time_to_die;
-	pthread_mutex_unlock(&data->philos[i].lock);
 	out[1] = data->philos[i].finished;
-	pthread_mutex_lock(&data->philos[i].lock);
 	out[2] = data->philos[i].eating;
-	
-	return(out);
+	pthread_mutex_unlock(&data->philos[i].lock);
+	return (out);
 }
 
 void	*supervisor(void *data_pointer)
 {
 	t_data	*data;
 	int		i;
-	long	aux[3];
+	long	*aux;
 
 	data = (t_data *)data_pointer;
 	i = 0;
-	while (data->dead == 0)
+	pthread_mutex_lock(&data->lock);
+	while (data->dead == 0 && data->philos[i].finished == 0)
 	{
+		pthread_mutex_unlock(&data->lock);
 		aux = ft_aux(data, i);
 		if (aux[0] <= get_time() && aux[1] == 0 && aux[2] == 0)
 		{
@@ -44,12 +45,12 @@ void	*supervisor(void *data_pointer)
 			pthread_mutex_unlock(&data->lock);
 			print_status(DIED, &data->philos[i]);
 		}
+		free(aux);
 		i++;
-		if (data->philos[i].finished == 1)
-			break ;
 		if (i == data->philo_nb)
 			i = 0;
 	}
+	pthread_mutex_unlock(&data->lock);
 	return (NULL);
 }
 
@@ -63,10 +64,10 @@ void	*routine(void *philo_pointer)
 	pthread_mutex_unlock(&philo->lock);
 	if (philo->id % 2 == 0)
 		ft_usleep(philo->data->eat_time / 10);
-	while (1) 
+	while (1)
 	{
 		pthread_mutex_lock(&philo->data->lock);
-		if (philo->data->dead != 0)
+		if (philo->data->dead == 1)
 		{
 			pthread_mutex_unlock(&philo->data->lock);
 			break ;
@@ -74,10 +75,7 @@ void	*routine(void *philo_pointer)
 		pthread_mutex_unlock(&philo->data->lock);
 		eat(philo);
 		if (philo->eat_count == philo->data->meals_nb)
-		{
-			philo->finished = 1;
 			break ;
-		}
 		print_status(THINK, philo);
 	}
 	return (NULL);

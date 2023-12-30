@@ -6,7 +6,7 @@
 /*   By: rpliego <rpliego@student.42barcelo>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 11:48:43 by rpliego           #+#    #+#             */
-/*   Updated: 2023/12/29 20:38:18 by rpliego          ###   ########.fr       */
+/*   Updated: 2023/12/30 17:33:54 by rpliego          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@
 # define THINK 4
 # define DIED 5
 
-
 /*--------colors------*/
 # define E "\033[m"        //end
 # define R "\033[1;31m"    //red
@@ -39,7 +38,6 @@
 # define C "\033[1;36m"    //Cyan
 # define O "\033[38;5;208m" //orange
 # define F "\033[38;5;128m"  //purple
-
 
 typedef struct s_philo
 {

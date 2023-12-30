@@ -6,7 +6,7 @@
 /*   By: rpliego <rpliego@student.42barcelo>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/18 21:42:12 by rpliego           #+#    #+#             */
-/*   Updated: 2023/12/29 21:17:13 by rpliego          ###   ########.fr       */
+/*   Updated: 2023/12/30 17:59:18 by rpliego          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,4 +27,3 @@ void	ft_usleep(long long time)
 	while (get_time() <= time)
 		usleep(200);
 }
-
