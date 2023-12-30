@@ -6,7 +6,7 @@
 /*   By: rpliego <rpliego@student.42barcelo>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 21:36:48 by rpliego           #+#    #+#             */
-/*   Updated: 2023/12/30 18:41:12 by rpliego          ###   ########.fr       */
+/*   Updated: 2023/12/30 23:08:31 by rpliego          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,12 @@ long	*ft_aux(t_data *data, int i)
 	long	*out;
 
 	out = malloc(3 * sizeof(long));
+	if (!out)
+		exit(1);
 	pthread_mutex_lock(&data->philos[i].lock);
 	out[0] = data->philos[i].time_to_die;
-	out[1] = data->philos[i].finished;
-	out[2] = data->philos[i].eating;
+	out[1] = (long)data->philos[i].finished;
+	out[2] = (long)data->philos[i].eating;
 	pthread_mutex_unlock(&data->philos[i].lock);
 	return (out);
 }
@@ -34,7 +36,7 @@ void	*supervisor(void *data_pointer)
 	data = (t_data *)data_pointer;
 	i = 0;
 	pthread_mutex_lock(&data->lock);
-	while (data->dead == 0 && data->philos[i].finished == 0)
+	while (data->dead == 0 && data->finish_all < data->philo_nb)
 	{
 		pthread_mutex_unlock(&data->lock);
 		aux = ft_aux(data, i);

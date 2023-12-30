@@ -6,7 +6,7 @@
 /*   By: rpliego <rpliego@student.42barcelo>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/18 21:54:19 by rpliego           #+#    #+#             */
-/*   Updated: 2023/12/30 18:37:54 by rpliego          ###   ########.fr       */
+/*   Updated: 2023/12/30 20:32:19 by rpliego          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,10 @@ void	eat(t_philo *philo)
 	philo->eat_count++;
 	pthread_mutex_lock(&philo->data->lock);
 	if (philo->eat_count == philo->data->meals_nb)
+	{
 		philo->finished = 1;
+		philo->data->finish_all++;
+	}
 	pthread_mutex_unlock(&philo->data->lock);
 	ft_usleep(philo->data->eat_time);
 	drop_fork(philo);

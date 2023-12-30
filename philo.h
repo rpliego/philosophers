@@ -6,7 +6,7 @@
 /*   By: rpliego <rpliego@student.42barcelo>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 11:48:43 by rpliego           #+#    #+#             */
-/*   Updated: 2023/12/30 17:33:54 by rpliego          ###   ########.fr       */
+/*   Updated: 2023/12/30 20:32:45 by rpliego          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ typedef struct s_data
 	long			eat_time;
 	long			sleep_time;
 	int				meals_nb;
+	int				finish_all;
 	int				dead;
 	long			start_time;
 	pthread_mutex_t	*forks;

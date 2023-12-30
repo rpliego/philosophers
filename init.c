@@ -6,7 +6,7 @@
 /*   By: rpliego <rpliego@student.42barcelo>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 15:27:32 by rpliego           #+#    #+#             */
-/*   Updated: 2023/12/29 20:38:14 by rpliego          ###   ########.fr       */
+/*   Updated: 2023/12/30 20:26:59 by rpliego          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ void	init_data(t_data *data, char **av, int ac)
 	else
 		data->meals_nb = -1;
 	data->dead = 0;
+	data->finish_all = 0;
 	pthread_mutex_init(&data->lock, NULL);
 	pthread_mutex_init(&data->write, NULL);
 }
