@@ -6,7 +6,7 @@
 /*   By: rpliego <rpliego@student.42barcelo>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 21:36:48 by rpliego           #+#    #+#             */
-/*   Updated: 2024/04/25 18:57:10 by rpliego          ###   ########.fr       */
+/*   Updated: 2024/04/25 19:25:23 by rpliego          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,23 +20,32 @@ long	*ft_aux(t_data *data, int i)
 	if (!out)
 		exit(1);
 	pthread_mutex_lock(&data->philos[i].lock);
+	pthread_mutex_lock(&data->mutx_finish);
 	out[0] = data->philos[i].time_to_die;
 	out[1] = (long)data->philos[i].finished;
 	out[2] = (long)data->philos[i].eating;
+	pthread_mutex_unlock(&data->mutx_finish);
 	pthread_mutex_unlock(&data->philos[i].lock);
 	return (out);
 }
 
-void	supervisor(t_data *data)
+void	*supervisor(void *data_pointer)
 {
 	int		i;
 	long	*aux;
+	t_data	*data;
 
+	data = (t_data *)data_pointer;
 	i = 0;
-	pthread_mutex_lock(&data->lock);
-	while (data->dead == 0 && data->finish_all < data->philo_nb)
+	while (1)
 	{
-		pthread_mutex_unlock(&data->lock);
+		pthread_mutex_lock(&data->mutx_dead);
+		if (data->dead || data->finish_all >= data->philo_nb)
+		{
+			pthread_mutex_unlock(&data->mutx_dead);
+			break ;
+		}
+		pthread_mutex_unlock(&data->mutx_dead);
 		aux = ft_aux(data, i);
 		if (aux[0] <= get_time() && aux[1] == 0 && aux[2] == 0)
 		{
@@ -44,7 +53,6 @@ void	supervisor(t_data *data)
 			data->dead = 1;
 			pthread_mutex_unlock(&data->mutx_dead);
 			print_status(DIED, &data->philos[i]);
-			break ;
 		}
 		free(aux);
 		i++;
@@ -52,6 +60,7 @@ void	supervisor(t_data *data)
 			i = 0;
 	}
 	pthread_mutex_unlock(&data->lock);
+	return (NULL);
 }
 
 void	*routine(void *philo_pointer)
@@ -70,7 +79,7 @@ void	*routine(void *philo_pointer)
 		if (philo->data->dead == 1)
 		{
 			pthread_mutex_unlock(&philo->data->mutx_dead);
-			break ;
+			return (NULL);
 		}
 		pthread_mutex_unlock(&philo->data->mutx_dead);
 		eat(philo);
@@ -92,7 +101,7 @@ void	init_threads(t_data *data)
 		pthread_create(&data->tid[i], NULL, &routine, &data->philos[i]);
 		ft_usleep(1);
 	}
-	supervisor(data);
+	pthread_create(&data->sp, NULL, &supervisor, data);
 	i = -1;
 	while (++i < data->philo_nb)
 		pthread_join(data->tid[i], NULL);
