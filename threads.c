@@ -6,7 +6,7 @@
 /*   By: rpliego <rpliego@student.42barcelo>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 21:36:48 by rpliego           #+#    #+#             */
-/*   Updated: 2023/12/30 23:08:31 by rpliego          ###   ########.fr       */
+/*   Updated: 2024/04/25 18:57:10 by rpliego          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,11 @@ long	*ft_aux(t_data *data, int i)
 	return (out);
 }
 
-void	*supervisor(void *data_pointer)
+void	supervisor(t_data *data)
 {
-	t_data	*data;
 	int		i;
 	long	*aux;
 
-	data = (t_data *)data_pointer;
 	i = 0;
 	pthread_mutex_lock(&data->lock);
 	while (data->dead == 0 && data->finish_all < data->philo_nb)
@@ -42,10 +40,11 @@ void	*supervisor(void *data_pointer)
 		aux = ft_aux(data, i);
 		if (aux[0] <= get_time() && aux[1] == 0 && aux[2] == 0)
 		{
-			pthread_mutex_lock(&data->lock);
+			pthread_mutex_lock(&data->mutx_dead);
 			data->dead = 1;
-			pthread_mutex_unlock(&data->lock);
+			pthread_mutex_unlock(&data->mutx_dead);
 			print_status(DIED, &data->philos[i]);
+			break ;
 		}
 		free(aux);
 		i++;
@@ -53,7 +52,6 @@ void	*supervisor(void *data_pointer)
 			i = 0;
 	}
 	pthread_mutex_unlock(&data->lock);
-	return (NULL);
 }
 
 void	*routine(void *philo_pointer)
@@ -68,13 +66,13 @@ void	*routine(void *philo_pointer)
 		ft_usleep(philo->data->eat_time / 10);
 	while (1)
 	{
-		pthread_mutex_lock(&philo->data->lock);
+		pthread_mutex_lock(&philo->data->mutx_dead);
 		if (philo->data->dead == 1)
 		{
-			pthread_mutex_unlock(&philo->data->lock);
+			pthread_mutex_unlock(&philo->data->mutx_dead);
 			break ;
 		}
-		pthread_mutex_unlock(&philo->data->lock);
+		pthread_mutex_unlock(&philo->data->mutx_dead);
 		eat(philo);
 		if (philo->eat_count == philo->data->meals_nb)
 			break ;
@@ -94,7 +92,7 @@ void	init_threads(t_data *data)
 		pthread_create(&data->tid[i], NULL, &routine, &data->philos[i]);
 		ft_usleep(1);
 	}
-	pthread_create(&data->sp, NULL, &supervisor, data);
+	supervisor(data);
 	i = -1;
 	while (++i < data->philo_nb)
 		pthread_join(data->tid[i], NULL);

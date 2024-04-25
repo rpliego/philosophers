@@ -6,7 +6,7 @@
 /*   By: rpliego <rpliego@student.42barcelo>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 11:48:43 by rpliego           #+#    #+#             */
-/*   Updated: 2023/12/30 20:32:45 by rpliego          ###   ########.fr       */
+/*   Updated: 2024/04/25 18:54:07 by rpliego          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ typedef struct s_data
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	lock;
 	pthread_mutex_t	write;
+	pthread_mutex_t	mutx_dead;
+	pthread_mutex_t	mutx_finish;
 	t_philo			*philos;
 }				t_data;
 
