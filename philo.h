@@ -20,8 +20,6 @@
 # include <sys/time.h>
 
 /*--------macros------*/
-// # define FORK_R -1
-// # define FORK_L -2
 # define FORK 1
 # define EATING 2
 # define SLEEP 3
@@ -55,7 +53,6 @@ typedef struct s_philo
 typedef struct s_data
 {
 	pthread_t		*tid;
-	pthread_t		sp;
 	int				philo_nb;
 	long			death_time;
 	long			eat_time;
