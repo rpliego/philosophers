@@ -29,14 +29,10 @@ long	*ft_aux(t_data *data, int i)
 	return (out);
 }
 
-void	*supervisor(void *data_pointer)
+void	*supervisor(t_data	*data, int i)
 {
-	int		i;
 	long	*aux;
-	t_data	*data;
 
-	data = (t_data *)data_pointer;
-	i = 0;
 	while (1)
 	{
 		pthread_mutex_lock(&data->mutx_dead);
@@ -59,7 +55,6 @@ void	*supervisor(void *data_pointer)
 		if (i == data->philo_nb)
 			i = 0;
 	}
-	pthread_mutex_unlock(&data->lock);
 	return (NULL);
 }
 
@@ -93,17 +88,18 @@ void	*routine(void *philo_pointer)
 void	init_threads(t_data *data)
 {
 	int	i;
+	int	j;
 
 	i = -1;
+	j = 0;
 	data->start_time = get_time();
 	while (++i < data->philo_nb)
 	{
 		pthread_create(&data->tid[i], NULL, &routine, &data->philos[i]);
 		ft_usleep(1);
 	}
-	pthread_create(&data->sp, NULL, &supervisor, data);
+	supervisor(data, j);
 	i = -1;
 	while (++i < data->philo_nb)
 		pthread_join(data->tid[i], NULL);
-	pthread_join(data->sp, NULL);
 }

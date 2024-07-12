@@ -33,8 +33,10 @@ void	ft_exit(t_data *data)
 		pthread_mutex_destroy(&data->forks[i]);
 		pthread_mutex_destroy(&data->philos[i].lock);
 	}
-	pthread_mutex_destroy(&data->write);
 	pthread_mutex_destroy(&data->lock);
+	pthread_mutex_destroy(&data->write);
+	pthread_mutex_destroy(&data->mutx_dead);
+	pthread_mutex_destroy(&data->mutx_finish);
 	ft_clear_data(data);
 }
 
